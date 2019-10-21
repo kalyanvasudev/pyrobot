@@ -19,7 +19,7 @@ branches:
 # Note that this is a Travis-CI specific problem; this is not needed in
 # general.
 before_install:
-    - sudo apt-get --purge remove mongodb-10gen
+    #- sudo apt-get --purge remove mongodb-10gen
     - sudo apt update
     - sudo apt-get install curl
     - curl 'https://raw.githubusercontent.com/kalyanvasudev/pyrobot/master/robots/LoCoBot/install/locobot_install_all.sh' > locobot_install_all.sh
