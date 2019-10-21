@@ -1,0 +1,32 @@
+language: python
+python:
+    - "2.7"
+# Allows the python virtualenv to use apt-get installed packages, which
+# is essential (as ROS recommends this and pip doesn't seem to contain
+# all packages, or contains them with errors).
+virtualenv:
+    system_site_packages: true
+# Allow caching of debian (apt-get) packages. This means they're cached
+# on Travis, so we still have to download/install them, but it will be
+# faster than going to the ubuntu repositories.
+cache: apt
+# Git settings.
+# NOTE(mbforbes): Change this to groovy-devel when moving to PR2 repo.
+branches:
+    only:
+        - master
+# Before anything, see if we can get the mongoDB troubles out of the way.
+# Note that this is a Travis-CI specific problem; this is not needed in
+# general.
+before_install:
+    - sudo apt-get --purge remove mongodb-10gen
+    - sudo apt update
+    - sudo apt-get install curl
+    - curl 'https://raw.githubusercontent.com/kalyanvasudev/pyrobot/master/robots/LoCoBot/install/locobot_install_all.sh' > locobot_install_all.sh
+    - chmod +x locobot_install_all.sh
+    - ./locobot_install_all.sh sim -t sim_only -p 2
+script:
+    - source ~/low_cost_ws/devel/setup.bash
+    - source ~/pyenv_pyrobot/bin/activate
+    - cd ~/low_cost_ws/src/pyrobot/tests
+    - python run_test.py --out_dir htmlcov/`git rev-parse HEAD` --nobrowser True
