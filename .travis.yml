@@ -24,7 +24,7 @@ before_install:
     - sudo apt-get install curl
     - curl 'https://raw.githubusercontent.com/kalyanvasudev/pyrobot/master/robots/LoCoBot/install/locobot_install_all.sh' > locobot_install_all.sh
     - chmod +x locobot_install_all.sh
-    - ./locobot_install_all.sh sim -t sim_only -p 2
+    - ./locobot_install_all.sh -t sim_only -p 2
 script:
     - source ~/low_cost_ws/devel/setup.bash
     - source ~/pyenv_pyrobot/bin/activate
