@@ -25,8 +25,8 @@ before_install:
     - curl 'https://raw.githubusercontent.com/kalyanvasudev/pyrobot/master/robots/LoCoBot/install/locobot_install_all.sh' > locobot_install_all.sh
     - chmod +x locobot_install_all.sh
     - ./locobot_install_all.sh -t sim_only -p 2
-script:
-    - source ~/low_cost_ws/devel/setup.bash
-    - source ~/pyenv_pyrobot/bin/activate
-    - cd ~/low_cost_ws/src/pyrobot/tests
+#script:
+    #- source ~/low_cost_ws/devel/setup.bash
+    #- source ~/pyenv_pyrobot/bin/activate
+    #- cd ~/low_cost_ws/src/pyrobot/tests
     #- python run_test.py --out_dir htmlcov/`git rev-parse HEAD` --nobrowser True
