@@ -111,7 +111,6 @@ declare -a ros_package_names=(
 	"ros-kinetic-moveit" 
 	"ros-kinetic-trac-ik"
 	"ros-kinetic-ar-track-alvar"
-	"ros-kinetic-turtlebot-*"
 	"ros-kinetic-move-base"
 	"ros-kinetic-ros-control"
 	"ros-kinetic-gazebo-ros-control"
@@ -121,7 +120,8 @@ declare -a ros_package_names=(
 	"ros-kinetic-kdl-parser-py"
 	"ros-kinetic-orocos-kdl"
 	"ros-kinetic-python-orocos-kdl"
-	"ros-kinetic-turtlebot"
+	"ros-kinetic-kobuki" 
+	"ros-kinetic-kobuki-core"
 	)
 
 install_packages "${ros_package_names[@]}"
