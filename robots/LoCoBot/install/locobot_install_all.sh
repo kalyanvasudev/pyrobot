@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 helpFunction()
 {
    echo ""
@@ -243,3 +245,5 @@ elapsed="$(($end_time-$start_time))"
 
 echo "Installation complete, took $elapsed seconds in total"
 echo "NOTE: Remember to logout and login back again before using the robot!"
+
+set +e
