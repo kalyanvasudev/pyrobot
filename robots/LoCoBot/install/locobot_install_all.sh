@@ -230,12 +230,12 @@ source $LOCOBOT_FOLDER/devel/setup.bash
 #		pip install .
 #		deactivate
 #	fi
-fi
+#fi
 #if [ $PYTHON_VERSION == "3" ]; then
 #	cd $LOCOBOT_FOLDER/src/pyrobot
 #	chmod +x install_pyrobot.sh
 #	source install_pyrobot.sh
-#fi
+#fi 
 
 end_time="$(date -u +%s)"
 
