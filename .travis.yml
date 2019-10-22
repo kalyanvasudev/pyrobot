@@ -43,7 +43,7 @@ install:
   - sudo apt-get install curl
   - curl 'https://raw.githubusercontent.com/kalyanvasudev/pyrobot/master/robots/LoCoBot/install/locobot_install_all.sh' > locobot_install_all.sh
   - chmod +x locobot_install_all.sh
-  - bash locobot_install_all.sh -t sim_only -p 2
+  #- bash locobot_install_all.sh -t sim_only -p 2
 
 #script:
   #- source /opt/ros/$ROS_DISTRO/setup.bash
