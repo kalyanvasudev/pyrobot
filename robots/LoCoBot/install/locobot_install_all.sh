@@ -168,7 +168,7 @@ if [ $INSTALL_TYPE == "full" ]; then
 	catkin_make clean
 	catkin_make -DCATKIN_ENABLE_TESTING=False -DCMAKE_BUILD_TYPE=Release
 	catkin_make install
-	echo "source ~/camera_ws/devel/setup.bash" >> ~/.bashrc
+	#echo "source ~/camera_ws/devel/setup.bash" >> ~/.bashrc
 	source ~/camera_ws/devel/setup.bash
 fi
 
@@ -201,8 +201,8 @@ fi
 if [ -d "$LOCOBOT_FOLDER/build" ]; then
 	rm -rf $LOCOBOT_FOLDER/build
 fi
-catkin_make
-echo "source $LOCOBOT_FOLDER/devel/setup.bash" >> ~/.bashrc
+#catkin_make
+#echo "source $LOCOBOT_FOLDER/devel/setup.bash" >> ~/.bashrc
 source $LOCOBOT_FOLDER/devel/setup.bash
 
 
