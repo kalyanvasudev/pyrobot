@@ -237,14 +237,6 @@ if [ $PYTHON_VERSION == "3" ]; then
 	source install_pyrobot.sh
 fi
 
-# STEP 8 - Setup udev rules
-cd $LOCOBOT_FOLDER/src/pyrobot/robots/LoCoBot
-sudo cp thirdparty/udev_rules/*.rules /etc/udev/rules.d
-sudo service udev reload
-sudo service udev restart
-sudo udevadm trigger
-sudo usermod -a -G dialout $USER
-
 end_time="$(date -u +%s)"
 
 elapsed="$(($end_time-$start_time))"
