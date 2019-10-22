@@ -206,36 +206,36 @@ echo "source $LOCOBOT_FOLDER/devel/setup.bash" >> ~/.bashrc
 source $LOCOBOT_FOLDER/devel/setup.bash
 
 
-if [ $INSTALL_TYPE == "full" ]; then
-	# STEP 6 - Dependencies and config for calibration
-	chmod +x src/pyrobot/robots/LoCoBot/locobot_navigation/orb_slam2_ros/scripts/gen_cfg.py
-	rosrun orb_slam2_ros gen_cfg.py
-	HIDDEN_FOLDER=~/.robot
-	if [ ! -d "$HIDDEN_FOLDER" ]; then
-		mkdir ~/.robot
-		cp $LOCOBOT_FOLDER/src/pyrobot/robots/LoCoBot/locobot_calibration/config/default.json ~/.robot/
-	fi
-fi
+#if [ $INSTALL_TYPE == "full" ]; then
+#	# STEP 6 - Dependencies and config for calibration
+#	chmod +x src/pyrobot/robots/LoCoBot/locobot_navigation/orb_slam2_ros/scripts/gen_cfg.py
+#	rosrun orb_slam2_ros gen_cfg.py
+#	HIDDEN_FOLDER=~/.robot
+#	if [ ! -d "$HIDDEN_FOLDER" ]; then
+#		mkdir ~/.robot
+#		cp $LOCOBOT_FOLDER/src/pyrobot/robots/LoCoBot/locobot_calibration/config/default.json ~/.robot/
+#	fi
+#fi
 
 # STEP 7 - Make a virtual env to install other dependencies (with pip)
-if [ $PYTHON_VERSION == "2" ]; then
-	virtualenv_name="pyenv_pyrobot"
-	VIRTUALENV_FOLDER=~/${virtualenv_name}
-	if [ ! -d "$VIRTUALENV_FOLDER" ]; then
-		virtualenv --system-site-packages -p python2.7 $VIRTUALENV_FOLDER
-		source ~/${virtualenv_name}/bin/activate
-		cd $LOCOBOT_FOLDER/src/pyrobot/robots/LoCoBot
-		pip install --ignore-installed -r requirements.txt
-		cd $LOCOBOT_FOLDER/src/pyrobot/
-		pip install .
-		deactivate
-	fi
+#if [ $PYTHON_VERSION == "2" ]; then
+#	virtualenv_name="pyenv_pyrobot"
+#	VIRTUALENV_FOLDER=~/${virtualenv_name}
+#	if [ ! -d "$VIRTUALENV_FOLDER" ]; then
+#		virtualenv --system-site-packages -p python2.7 $VIRTUALENV_FOLDER
+#		source ~/${virtualenv_name}/bin/activate
+#		cd $LOCOBOT_FOLDER/src/pyrobot/robots/LoCoBot
+#		pip install --ignore-installed -r requirements.txt
+#		cd $LOCOBOT_FOLDER/src/pyrobot/
+#		pip install .
+#		deactivate
+#	fi
 fi
-if [ $PYTHON_VERSION == "3" ]; then
-	cd $LOCOBOT_FOLDER/src/pyrobot
-	chmod +x install_pyrobot.sh
-	source install_pyrobot.sh
-fi
+#if [ $PYTHON_VERSION == "3" ]; then
+#	cd $LOCOBOT_FOLDER/src/pyrobot
+#	chmod +x install_pyrobot.sh
+#	source install_pyrobot.sh
+#fi
 
 end_time="$(date -u +%s)"
 
