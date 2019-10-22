@@ -1,31 +1,53 @@
-language: python
-python:
-    - "2.7"
-# Allows the python virtualenv to use apt-get installed packages, which
-# is essential (as ROS recommends this and pip doesn't seem to contain
-# all packages, or contains them with errors).
-virtualenv:
-    system_site_packages: true
-# Allow caching of debian (apt-get) packages. This means they're cached
-# on Travis, so we still have to download/install them, but it will be
-# faster than going to the ubuntu repositories.
-cache: apt
-# Git settings.
-# NOTE(mbforbes): Change this to groovy-devel when moving to PR2 repo.
+
+
+
+# virtualenv:
+#     system_site_packages: true
+
+sudo: required
+cache:
+  - apt
 branches:
     only:
         - master
-# Before anything, see if we can get the mongoDB troubles out of the way.
-# Note that this is a Travis-CI specific problem; this is not needed in
+# Build all valid Ubuntu/ROS combinations available on Travis VMs.
+language: generic
+matrix:
+  include:
+  - name: "Xenial kinetic"
+    dist: xenial
+    env: ROS_DISTRO=kinetic
+
+
+env:
+  global:
+    - ROS_CI_DESKTOP="`lsb_release -cs`"  # e.g. [trusty|xenial|...]
+    - ROS_PARALLEL_JOBS='-j8 -l6'
+    # Set the python path manually to include /usr/-/python2.7/dist-packages
+    # as this is where apt-get installs python packages.
+    - PYTHONPATH=$PYTHONPATH:/usr/lib/python2.7/dist-packages:/usr/local/lib/python2.7/dist-packages
+
+# Install system dependencies, namely a very barebones ROS setup.
+before_install:
+  - sudo sh -c "echo \"deb http://packages.ros.org/ros/ubuntu $ROS_CI_DESKTOP main\" > /etc/apt/sources.list.d/ros-latest.list"
+  - sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+  - sudo apt-get update -qq
+  - sudo apt-get install dpkg
+  - sudo apt-get install -y python-catkin-pkg python-rosdep python-wstool ros-$ROS_DISTRO-ros-base
+  - source /opt/ros/$ROS_DISTRO/setup.bash
+  # Prepare rosdep to install dependencies.
+  - sudo rosdep init
+  - rosdep update --include-eol-distros  # Support EOL distros.
 install:
-    - sudo apt-get --purge remove mongodb-10gen
-    - sudo apt update
-    - sudo apt-get install curl
-    - curl 'https://raw.githubusercontent.com/kalyanvasudev/pyrobot/master/robots/LoCoBot/install/locobot_install_all.sh' > locobot_install_all.sh
-    - chmod +x locobot_install_all.sh
-    - ./locobot_install_all.sh -t sim_only -p 2
+  - sudo apt update
+  - sudo apt-get install curl
+  - curl 'https://raw.githubusercontent.com/kalyanvasudev/pyrobot/master/robots/LoCoBot/install/locobot_install_all.sh' > locobot_install_all.sh
+  - chmod +x locobot_install_all.sh
+  - bash locobot_install_all.sh -t sim_only -p 2
+
 #script:
-    #- source ~/low_cost_ws/devel/setup.bash
-    #- source ~/pyenv_pyrobot/bin/activate
-    #- cd ~/low_cost_ws/src/pyrobot/tests
-    #- python run_test.py --out_dir htmlcov/`git rev-parse HEAD` --nobrowser True
+  #- source /opt/ros/$ROS_DISTRO/setup.bash
+  #- source ~/low_cost_ws/devel/setup.bash
+  #- source ~/pyenv_pyrobot/bin/activate
+  #- cd ~/low_cost_ws/src/pyrobot/tests
+  #- python run_test.py --out_dir htmlcov/`git rev-parse HEAD` --nobrowser True
