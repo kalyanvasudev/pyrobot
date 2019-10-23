@@ -124,7 +124,7 @@ declare -a ros_package_names=(
 	"ros-kinetic-kobuki-core"
 	)
 
-install_packages "${ros_package_names[@]}"
+#install_packages "${ros_package_names[@]}"
 
 # if [ $INSTALL_TYPE == "full" ]; then
 
