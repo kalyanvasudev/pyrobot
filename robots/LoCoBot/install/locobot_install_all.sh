@@ -168,8 +168,8 @@ if [ $INSTALL_TYPE == "full" ]; then
 	catkin_make clean
 	catkin_make -DCATKIN_ENABLE_TESTING=False -DCMAKE_BUILD_TYPE=Release
 	catkin_make install
-	#echo "source ~/camera_ws/devel/setup.bash" >> ~/.bashrc
-	#source ~/camera_ws/devel/setup.bash
+	echo "source ~/camera_ws/devel/setup.bash" >> ~/.bashrc
+	source ~/camera_ws/devel/setup.bash
 fi
 
 # # STEP 5 - Setup catkin workspace
@@ -192,8 +192,8 @@ cd $LOCOBOT_FOLDER
 rosdep update 
 rosdep install --from-paths src -i -y
 cd $LOCOBOT_FOLDER/src/pyrobot/robots/LoCoBot/install
-#chmod +x install_orb_slam2.sh
-#source install_orb_slam2.sh
+chmod +x install_orb_slam2.sh
+source install_orb_slam2.sh
 cd $LOCOBOT_FOLDER
 if [ -d "$LOCOBOT_FOLDER/devel" ]; then
 	rm -rf $LOCOBOT_FOLDER/devel
