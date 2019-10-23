@@ -126,81 +126,81 @@ declare -a ros_package_names=(
 
 install_packages "${ros_package_names[@]}"
 
-if [ $INSTALL_TYPE == "full" ]; then
+# if [ $INSTALL_TYPE == "full" ]; then
 
-	# STEP 4 - Install camera (Intel Realsense D435)
-	echo "Installing camera dependencies..."
+# 	# STEP 4 - Install camera (Intel Realsense D435)
+# 	echo "Installing camera dependencies..."
 
-	# STEP 4A: Install librealsense
-	if [ $(dpkg-query -W -f='${Status}' librealsense2 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
-		sudo apt-key adv --keyserver keys.gnupg.net --recv-key C8B3A55A6F3EFCDE || sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key C8B3A55A6F3EFCDE
-		sudo add-apt-repository "deb http://realsense-hw-public.s3.amazonaws.com/Debian/apt-repo xenial main" -u
-		sudo apt-get update
-		version="2.18.1-0~realsense0.568"
-		sudo apt-get -y install librealsense2-udev-rules=${version}
-		sudo apt-get -y install librealsense2-dkms=1.3.4-0ubuntu1
-		sudo apt-get -y install librealsense2=${version}
-		sudo apt-get -y install librealsense2-utils=${version}
-		sudo apt-get -y install librealsense2-dev=${version}
-		sudo apt-get -y install librealsense2-dbg=${version}
-	fi
+# 	# STEP 4A: Install librealsense
+# 	if [ $(dpkg-query -W -f='${Status}' librealsense2 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
+# 		sudo apt-key adv --keyserver keys.gnupg.net --recv-key C8B3A55A6F3EFCDE || sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key C8B3A55A6F3EFCDE
+# 		sudo add-apt-repository "deb http://realsense-hw-public.s3.amazonaws.com/Debian/apt-repo xenial main" -u
+# 		sudo apt-get update
+# 		version="2.18.1-0~realsense0.568"
+# 		sudo apt-get -y install librealsense2-udev-rules=${version}
+# 		sudo apt-get -y install librealsense2-dkms=1.3.4-0ubuntu1
+# 		sudo apt-get -y install librealsense2=${version}
+# 		sudo apt-get -y install librealsense2-utils=${version}
+# 		sudo apt-get -y install librealsense2-dev=${version}
+# 		sudo apt-get -y install librealsense2-dbg=${version}
+# 	fi
 
-	# STEP 4B: Install realsense2 SDK from source (in a separate catkin workspace)
-	CAMERA_FOLDER=~/camera_ws
-	if [ ! -d "$CAMERA_FOLDER/src" ]; then
-		mkdir -p $CAMERA_FOLDER/src
-		cd $CAMERA_FOLDER/src/
-		catkin_init_workspace
-	fi
-	if [ ! -d "$CAMERA_FOLDER/src/realsense" ]; then
-		cd $CAMERA_FOLDER/src/
-		git clone https://github.com/intel-ros/realsense.git
-		cd realsense
-		git checkout a036d81bcc6890658104a8de1cba24538effd6e3
-	fi
-	if [ -d "$CAMERA_FOLDER/devel" ]; then
-		rm -rf $CAMERA_FOLDER/devel
-	fi
-	if [ -d "$CAMERA_FOLDER/build" ]; then
-		rm -rf $CAMERA_FOLDER/build
-	fi
-	cd $CAMERA_FOLDER
-	catkin_make clean
-	catkin_make -DCATKIN_ENABLE_TESTING=False -DCMAKE_BUILD_TYPE=Release
-	catkin_make install
-	#echo "source ~/camera_ws/devel/setup.bash" >> ~/.bashrc
-	#source ~/camera_ws/devel/setup.bash
-fi
+# 	# STEP 4B: Install realsense2 SDK from source (in a separate catkin workspace)
+# 	CAMERA_FOLDER=~/camera_ws
+# 	if [ ! -d "$CAMERA_FOLDER/src" ]; then
+# 		mkdir -p $CAMERA_FOLDER/src
+# 		cd $CAMERA_FOLDER/src/
+# 		catkin_init_workspace
+# 	fi
+# 	if [ ! -d "$CAMERA_FOLDER/src/realsense" ]; then
+# 		cd $CAMERA_FOLDER/src/
+# 		git clone https://github.com/intel-ros/realsense.git
+# 		cd realsense
+# 		git checkout a036d81bcc6890658104a8de1cba24538effd6e3
+# 	fi
+# 	if [ -d "$CAMERA_FOLDER/devel" ]; then
+# 		rm -rf $CAMERA_FOLDER/devel
+# 	fi
+# 	if [ -d "$CAMERA_FOLDER/build" ]; then
+# 		rm -rf $CAMERA_FOLDER/build
+# 	fi
+# 	cd $CAMERA_FOLDER
+# 	catkin_make clean
+# 	catkin_make -DCATKIN_ENABLE_TESTING=False -DCMAKE_BUILD_TYPE=Release
+# 	catkin_make install
+# 	#echo "source ~/camera_ws/devel/setup.bash" >> ~/.bashrc
+# 	#source ~/camera_ws/devel/setup.bash
+# fi
 
-# STEP 5 - Setup catkin workspace
-echo "Setting up robot software..."
-LOCOBOT_FOLDER=~/low_cost_ws
-if [ ! -d "$LOCOBOT_FOLDER/src" ]; then
-	mkdir -p $LOCOBOT_FOLDER/src
-	cd $LOCOBOT_FOLDER/src
-	catkin_init_workspace
-fi
-if [ ! -d "$LOCOBOT_FOLDER/src/pyrobot" ]; then
-	cd $LOCOBOT_FOLDER/src
-	git clone --recurse-submodules https://github.com/facebookresearch/pyrobot.git
-	if [ $PYTHON_VERSION == "3" ]; then
-		cd pyrobot
-		git checkout python3
-	fi
-fi
-cd $LOCOBOT_FOLDER
-rosdep update 
-rosdep install --from-paths src -i -y
-cd $LOCOBOT_FOLDER/src/pyrobot/robots/LoCoBot/install
-#chmod +x install_orb_slam2.sh
-#source install_orb_slam2.sh
-cd $LOCOBOT_FOLDER
-if [ -d "$LOCOBOT_FOLDER/devel" ]; then
-	rm -rf $LOCOBOT_FOLDER/devel
-fi
-if [ -d "$LOCOBOT_FOLDER/build" ]; then
-	rm -rf $LOCOBOT_FOLDER/build
-fi
+# # STEP 5 - Setup catkin workspace
+# echo "Setting up robot software..."
+# LOCOBOT_FOLDER=~/low_cost_ws
+# if [ ! -d "$LOCOBOT_FOLDER/src" ]; then
+# 	mkdir -p $LOCOBOT_FOLDER/src
+# 	cd $LOCOBOT_FOLDER/src
+# 	catkin_init_workspace
+# fi
+# if [ ! -d "$LOCOBOT_FOLDER/src/pyrobot" ]; then
+# 	cd $LOCOBOT_FOLDER/src
+# 	git clone --recurse-submodules https://github.com/facebookresearch/pyrobot.git
+# 	if [ $PYTHON_VERSION == "3" ]; then
+# 		cd pyrobot
+# 		git checkout python3
+# 	fi
+# fi
+# cd $LOCOBOT_FOLDER
+# rosdep update 
+# rosdep install --from-paths src -i -y
+# cd $LOCOBOT_FOLDER/src/pyrobot/robots/LoCoBot/install
+# #chmod +x install_orb_slam2.sh
+# #source install_orb_slam2.sh
+# cd $LOCOBOT_FOLDER
+# if [ -d "$LOCOBOT_FOLDER/devel" ]; then
+# 	rm -rf $LOCOBOT_FOLDER/devel
+# fi
+# if [ -d "$LOCOBOT_FOLDER/build" ]; then
+# 	rm -rf $LOCOBOT_FOLDER/build
+# fi
 #catkin_make
 #echo "source $LOCOBOT_FOLDER/devel/setup.bash" >> ~/.bashrc
 #source $LOCOBOT_FOLDER/devel/setup.bash
@@ -237,11 +237,11 @@ fi
 #	source install_pyrobot.sh
 #fi 
 
-end_time="$(date -u +%s)"
+# end_time="$(date -u +%s)"
 
-elapsed="$(($end_time-$start_time))"
+# elapsed="$(($end_time-$start_time))"
 
-echo "Installation complete, took $elapsed seconds in total"
-echo "NOTE: Remember to logout and login back again before using the robot!"
+# echo "Installation complete, took $elapsed seconds in total"
+# echo "NOTE: Remember to logout and login back again before using the robot!"
 
 exit 0
