@@ -102,7 +102,7 @@ if [ $(dpkg-query -W -f='${Status}' ros-kinetic-desktop-full 2>/dev/null | grep 
 else
 	echo "ros-kinetic-desktop-full is already installed";
 fi
-source /opt/ros/kinetic/setup.bash
+#source /opt/ros/kinetic/setup.bash
 
 
 # STEP 3 - Install ROS debian dependencies
