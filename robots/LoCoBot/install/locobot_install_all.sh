@@ -58,71 +58,71 @@ install_packages () {
 }
 
 
-# STEP 0 - Make sure you have installed Ubuntu 16.04, and upgrade to lastest dist
-if [ $(dpkg-query -W -f='${Status}' librealsense2 2>/dev/null | grep -c "ok installed") -eq 0 ]; then 
-        sudo apt-get update #&& sudo apt-get -y dist-upgrade
-fi
+# # STEP 0 - Make sure you have installed Ubuntu 16.04, and upgrade to lastest dist
+# if [ $(dpkg-query -W -f='${Status}' librealsense2 2>/dev/null | grep -c "ok installed") -eq 0 ]; then 
+#         sudo apt-get update #&& sudo apt-get -y dist-upgrade
+# fi
 
 
-# STEP 1 - Install basic dependencies
-declare -a package_names=(
-	"vim" 
-	"git" 
-	"terminator"
-	"python-pip"
-	"python-dev"
-	"python-virtualenv"
-	"screen"
-	"openssh-server" 
-	"libssl-dev" 
-	"libusb-1.0-0-dev"
-	"libgtk-3-dev" 
-	"libglfw3-dev"
-	)
-install_packages "${package_names[@]}"
+# # STEP 1 - Install basic dependencies
+# declare -a package_names=(
+# 	"vim" 
+# 	"git" 
+# 	"terminator"
+# 	"python-pip"
+# 	"python-dev"
+# 	"python-virtualenv"
+# 	"screen"
+# 	"openssh-server" 
+# 	"libssl-dev" 
+# 	"libusb-1.0-0-dev"
+# 	"libgtk-3-dev" 
+# 	"libglfw3-dev"
+# 	)
+# install_packages "${package_names[@]}"
 
-sudo pip install --upgrade cryptography
-sudo python -m easy_install --upgrade pyOpenSSL
-sudo pip install --upgrade pip
-
-
-# STEP 2 - Install ROS Kinetic
-if [ $(dpkg-query -W -f='${Status}' ros-kinetic-desktop-full 2>/dev/null | grep -c "ok installed") -eq 0 ]; then 
-	echo "Installing ROS..."
-	sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
-	sudo apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
-	sudo apt-get update
-	sudo apt-get -y install ros-kinetic-desktop-full
-	if [ -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then
-	    sudo rm /etc/ros/rosdep/sources.list.d/20-default.list
-	fi
-	sudo rosdep init
-	rosdep update
-	echo "source /opt/ros/kinetic/setup.bash" >> ~/.bashrc
-else
-	echo "ros-kinetic-desktop-full is already installed";
-fi
-#source /opt/ros/kinetic/setup.bash
+# sudo pip install --upgrade cryptography
+# sudo python -m easy_install --upgrade pyOpenSSL
+# sudo pip install --upgrade pip
 
 
-# STEP 3 - Install ROS debian dependencies
-declare -a ros_package_names=(
-	"ros-kinetic-dynamixel-motor" 
-	"ros-kinetic-moveit" 
-	"ros-kinetic-trac-ik"
-	"ros-kinetic-ar-track-alvar"
-	"ros-kinetic-move-base"
-	"ros-kinetic-ros-control"
-	"ros-kinetic-gazebo-ros-control"
-	"ros-kinetic-ros-controllers"
-	"ros-kinetic-navigation"
-	"ros-kinetic-rgbd-launch"
-	"ros-kinetic-kdl-parser-py"
-	"ros-kinetic-orocos-kdl"
-	"ros-kinetic-python-orocos-kdl"
-	"ros-kinetic-kobuki" 
-	"ros-kinetic-kobuki-core"
-	)
+# # STEP 2 - Install ROS Kinetic
+# if [ $(dpkg-query -W -f='${Status}' ros-kinetic-desktop-full 2>/dev/null | grep -c "ok installed") -eq 0 ]; then 
+# 	echo "Installing ROS..."
+# 	sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+# 	sudo apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+# 	sudo apt-get update
+# 	sudo apt-get -y install ros-kinetic-desktop-full
+# 	if [ -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then
+# 	    sudo rm /etc/ros/rosdep/sources.list.d/20-default.list
+# 	fi
+# 	sudo rosdep init
+# 	rosdep update
+# 	echo "source /opt/ros/kinetic/setup.bash" >> ~/.bashrc
+# else
+# 	echo "ros-kinetic-desktop-full is already installed";
+# fi
+# source /opt/ros/kinetic/setup.bash
+
+
+# # STEP 3 - Install ROS debian dependencies
+# declare -a ros_package_names=(
+# 	"ros-kinetic-dynamixel-motor" 
+# 	"ros-kinetic-moveit" 
+# 	"ros-kinetic-trac-ik"
+# 	"ros-kinetic-ar-track-alvar"
+# 	"ros-kinetic-move-base"
+# 	"ros-kinetic-ros-control"
+# 	"ros-kinetic-gazebo-ros-control"
+# 	"ros-kinetic-ros-controllers"
+# 	"ros-kinetic-navigation"
+# 	"ros-kinetic-rgbd-launch"
+# 	"ros-kinetic-kdl-parser-py"
+# 	"ros-kinetic-orocos-kdl"
+# 	"ros-kinetic-python-orocos-kdl"
+# 	"ros-kinetic-kobuki" 
+# 	"ros-kinetic-kobuki-core"
+# 	)
 
 #install_packages "${ros_package_names[@]}"
 
