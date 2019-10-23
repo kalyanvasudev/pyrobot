@@ -65,21 +65,21 @@ fi
 
 
 # # STEP 1 - Install basic dependencies
-# declare -a package_names=(
-# 	"vim" 
-# 	"git" 
-# 	"terminator"
-# 	"python-pip"
-# 	"python-dev"
-# 	"python-virtualenv"
-# 	"screen"
-# 	"openssh-server" 
-# 	"libssl-dev" 
-# 	"libusb-1.0-0-dev"
-# 	"libgtk-3-dev" 
-# 	"libglfw3-dev"
-# 	)
-# install_packages "${package_names[@]}"
+declare -a package_names=(
+	"vim" 
+	"git" 
+	"terminator"
+	"python-pip"
+	"python-dev"
+	"python-virtualenv"
+	"screen"
+	"openssh-server" 
+	"libssl-dev" 
+	"libusb-1.0-0-dev"
+	"libgtk-3-dev" 
+	"libglfw3-dev"
+	)
+install_packages "${package_names[@]}"
 
 # sudo pip install --upgrade cryptography
 # sudo python -m easy_install --upgrade pyOpenSSL
