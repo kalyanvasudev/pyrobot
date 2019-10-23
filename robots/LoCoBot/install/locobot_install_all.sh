@@ -42,7 +42,7 @@ trap "kill 0" EXIT
 echo -e "\e[1;33m ******************************************* \e[0m"
 echo -e "\e[1;33m The installation takes around half an hour! \e[0m"
 echo -e "\e[1;33m ******************************************* \e[0m"
-sleep 4
+#sleep 4
 #start_time="$(date -u +%s)"
 
 # install_packages () {
