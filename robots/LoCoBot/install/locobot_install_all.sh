@@ -37,25 +37,25 @@ fi
 echo "$INSTALL_TYPE installation type is chosen for LoCoBot."
 echo "Python $PYTHON_VERSION chosen for pyRobot installation."
 
-trap "exit" INT TERM ERR
-trap "kill 0" EXIT
-echo -e "\e[1;33m ******************************************* \e[0m"
-echo -e "\e[1;33m The installation takes around half an hour! \e[0m"
-echo -e "\e[1;33m ******************************************* \e[0m"
-sleep 4
-start_time="$(date -u +%s)"
+# trap "exit" INT TERM ERR
+# trap "kill 0" EXIT
+# echo -e "\e[1;33m ******************************************* \e[0m"
+# echo -e "\e[1;33m The installation takes around half an hour! \e[0m"
+# echo -e "\e[1;33m ******************************************* \e[0m"
+# sleep 4
+# start_time="$(date -u +%s)"
 
-install_packages () {
-	pkg_names=("$@")
-	for package_name in "${pkg_names[@]}"; 
-	do
-		if [ $(dpkg-query -W -f='${Status}' $package_name 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
-		    sudo apt-get -y install $package_name
-		else
-		    echo "${package_name} is already installed";
-		fi
-	done
-}
+# install_packages () {
+# 	pkg_names=("$@")
+# 	for package_name in "${pkg_names[@]}"; 
+# 	do
+# 		if [ $(dpkg-query -W -f='${Status}' $package_name 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
+# 		    sudo apt-get -y install $package_name
+# 		else
+# 		    echo "${package_name} is already installed";
+# 		fi
+# 	done
+# }
 
 
 # # STEP 0 - Make sure you have installed Ubuntu 16.04, and upgrade to lastest dist
