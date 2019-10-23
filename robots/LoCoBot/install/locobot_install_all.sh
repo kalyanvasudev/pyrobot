@@ -201,9 +201,9 @@ fi
 if [ -d "$LOCOBOT_FOLDER/build" ]; then
 	rm -rf $LOCOBOT_FOLDER/build
 fi
-# catkin_make
-# echo "source $LOCOBOT_FOLDER/devel/setup.bash" >> ~/.bashrc
-# source $LOCOBOT_FOLDER/devel/setup.bash
+catkin_make
+echo "source $LOCOBOT_FOLDER/devel/setup.bash" >> ~/.bashrc
+source $LOCOBOT_FOLDER/devel/setup.bash
 
 
 if [ $INSTALL_TYPE == "full" ]; then
