@@ -24,6 +24,7 @@ install:
   - curl 'https://raw.githubusercontent.com/kalyanvasudev/pyrobot/master/robots/LoCoBot/install/locobot_install_all.sh' > locobot_install_all.sh
   - chmod +x locobot_install_all.sh
   - bash locobot_install_all.sh -t sim_only -p 2
+  - ls
   - source /opt/ros/kinetic/setup.bash
   - source /home/travis/low_cost_ws/devel/setup.bash
   - source /home/travis/pyenv_pyrobot/bin/activate
