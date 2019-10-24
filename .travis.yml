@@ -12,6 +12,8 @@ branches:
         - master
 # Build all valid Ubuntu/ROS combinations available on Travis VMs.
 language: generic
+virtualenv:
+    system_site_packages: true
 matrix:
   include:
   - name: "Xenial kinetic"
