@@ -4,8 +4,8 @@ python:
 # Allows the python virtualenv to use apt-get installed packages, which
 # is essential (as ROS recommends this and pip doesn't seem to contain
 # all packages, or contains them with errors).
-virtualenv:
-    system_site_packages: true
+# virtualenv:
+#    system_site_packages: true
 # Allow caching of debian (apt-get) packages. This means they're cached
 # on Travis, so we still have to download/install them, but it will be
 # faster than going to the ubuntu repositories.
