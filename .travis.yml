@@ -26,7 +26,7 @@ install:
   - ./locobot_install_all.sh -t sim_only -p 2
 
 script:
-  - source /opt/ros/$ROS_DISTRO/setup.bash
+  - source /opt/ros/kinetic/setup.bash
   - source ~/low_cost_ws/devel/setup.bash
   - source ~/pyenv_pyrobot/bin/activate
   - cd ~/low_cost_ws/src/pyrobot/tests
