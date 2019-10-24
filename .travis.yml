@@ -22,6 +22,7 @@ install:
   - sudo apt update
   - sudo apt-get install curl
   - curl 'https://raw.githubusercontent.com/kalyanvasudev/pyrobot/master/robots/LoCoBot/install/locobot_install_all.sh' > locobot_install_all.sh
+  - pwd
   - chmod +x locobot_install_all.sh
   - bash locobot_install_all.sh -t sim_only -p 2
   - ls
