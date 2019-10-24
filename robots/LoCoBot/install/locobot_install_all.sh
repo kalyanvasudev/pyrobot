@@ -218,8 +218,6 @@ if [ $INSTALL_TYPE == "full" ]; then
 fi
 
 # STEP 7 - Make a virtual env to install other dependencies (with pip)
-sudo -H pip install virtualenv
-sudo pip install --upgrade pip
 if [ $PYTHON_VERSION == "2" ]; then
 	virtualenv_name="pyenv_pyrobot"
 	VIRTUALENV_FOLDER=~/${virtualenv_name}
