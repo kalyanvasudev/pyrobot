@@ -30,4 +30,5 @@ script:
   - source ~/low_cost_ws/devel/setup.bash
   - source ~/pyenv_pyrobot/bin/activate
   - cd ~/low_cost_ws/src/pyrobot/tests
-  - python run_test.py --out_dir htmlcov/`git rev-parse HEAD` --nobrowser True
+  - python travis_debug.py
+  #- python run_test.py --out_dir htmlcov/`git rev-parse HEAD` --nobrowser True
