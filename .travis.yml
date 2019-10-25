@@ -22,6 +22,7 @@ install:
   - sudo apt update
   - cd
   - sudo apt-get install curl
+  - sudo apt-get install python-tk
   - curl 'https://raw.githubusercontent.com/kalyanvasudev/pyrobot/master/robots/LoCoBot/install/locobot_install_all.sh' > locobot_install_all.sh
   - pwd
   - chmod +x locobot_install_all.sh
