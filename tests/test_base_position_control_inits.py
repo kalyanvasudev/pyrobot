@@ -77,7 +77,7 @@ def _test_init(init_type, start_pos, goal_pos, reverse):
     _mkdir_if_missing(tmp_dir)
     file_name = os.path.join(tmp_dir, file_name)
 
-    _plot_test(init_states, start_pos, goal_pos, file_name)
+    #_plot_test(init_states, start_pos, goal_pos, file_name)
     _states_close(init_states[-1, :], goal_pos)
 
 
