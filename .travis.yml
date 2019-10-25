@@ -31,7 +31,7 @@ install:
   - source /opt/ros/kinetic/setup.bash
   - source ~/low_cost_ws/devel/setup.bash
   - source ~/pyenv_pyrobot/bin/activate
-  - cd  ~/low_cost_ws/src/pyrobot/tests
+  - cd /home/travis/build/kalyanvasudev/pyrobot/tests
   - ls
   - python travis_debug.py
   #- python run_test.py --out_dir htmlcov/`git rev-parse HEAD` --nobrowser True
