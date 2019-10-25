@@ -34,4 +34,4 @@ install:
   - cd /home/travis/build/kalyanvasudev/pyrobot/tests
   - ls
   - python travis_debug.py
-  #- python run_test.py --out_dir htmlcov/`git rev-parse HEAD` --nobrowser True
+  - python run_test.py --out_dir htmlcov/`git rev-parse HEAD` --nobrowser True
