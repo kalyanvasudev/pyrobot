@@ -95,7 +95,7 @@ def main(_):
         run_test(test_cmds, 'real.html')
 
     else:
-         print('111111111111')
+        print('111111111111')
         p = Popen(['rosnode', 'cleanup'], shell=True)
         print('22222222222222')
         p.wait()
