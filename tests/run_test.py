@@ -27,7 +27,7 @@ def launch_gazebo(args, wait_time=12):
     print('Launching Gazebo ...')
     args = args.split()
     p = Popen(['roslaunch', 'locobot_control', 'main.launch'] + args,
-              stdin=PIPE, stdout=FNULL, stderr=STDOUT)
+              stdin=PIPE, stdout=FNULL, stderr=STDOUT, shell=True)
     time.sleep(wait_time)
     return p
 
@@ -40,7 +40,7 @@ def run_test(testing_cmds, html_file=None, show_in_browser=True):
         if html_file is not None:
             cmd += ['--html={:s}'.format(html_file), '--self-contained-html']
         cmd += ['--cov-append']
-        t1 = Popen(cmd + test_file.split())
+        t1 = Popen(cmd + test_file.split(), shell=True)
         t1.wait()
     if show_in_browser and not FLAGS.nobrowser:
         webbrowser.open(html_file)
@@ -49,7 +49,7 @@ def run_test(testing_cmds, html_file=None, show_in_browser=True):
 def gen_html_anno(show_in_browser=True):
     if FLAGS.out_dir is not None:
         cov_dir = os.path.join(FLAGS.out_dir, 'coverage')
-        p = Popen(['coverage', 'html', '-d', cov_dir])
+        p = Popen(['coverage', 'html', '-d', cov_dir], shell=True)
         p.wait()
         if show_in_browser and not FLAGS.nobrowser:
             webbrowser.open(os.path.join(cov_dir, 'index.html'))
@@ -63,7 +63,7 @@ def exit_gazebo(gp):
     # # `rosnode cleanup` will give error: ERROR: Unable to communicate with master!
     # # if the gazebo is already shutdown correctly
     # # so this error is expected!
-    p = Popen(['rosnode', 'cleanup'])
+    p = Popen(['rosnode', 'cleanup'], shell=True)
     p.wait()
     print('Gazebo exit successfully!')
 
@@ -95,7 +95,7 @@ def main(_):
         run_test(test_cmds, 'real.html')
 
     else:
-        p = Popen(['rosnode', 'cleanup'])
+        p = Popen(['rosnode', 'cleanup'], shell=True)
         p.wait()
 
         # Kobuki base tests. s-gupta: I had to split the following tests into
