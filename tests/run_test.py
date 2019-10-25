@@ -81,7 +81,7 @@ def main(_):
         os.makedirs(FLAGS.out_dir)
 
     # # Tests that do not need gazebo
-    test_cmds = ['test_pyrobot_classes.py test_base_position_control_inits.py']
+    test_cmds = ['test_pyrobot_classes.py']# test_base_position_control_inits.py']
     run_test(test_cmds, 'basic.html')
 
     if FLAGS.test_real:
