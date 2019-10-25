@@ -26,6 +26,7 @@ install:
   - chmod +x locobot_install_all.sh
   - bash locobot_install_all.sh -t sim_only -p 2
   - ls
+  - locate low_cost_ws
   - source /opt/ros/kinetic/setup.bash
   - source /home/travis/build/kalyanvasudev/pyrobot/project/low_cost_ws/devel/setup.bash
   - source /home/travis/build/kalyanvasudev/pyrobot/project/pyenv_pyrobot/bin/activate
