@@ -40,7 +40,7 @@ def run_test(testing_cmds, html_file=None, show_in_browser=True):
         if html_file is not None:
             cmd += ['--html={:s}'.format(html_file), '--self-contained-html']
         cmd += ['--cov-append']
-        t1 = Popen(cmd + test_file.split(), shell=True)
+        t1 = Popen(cmd + test_file.split())
         t1.wait()
     if show_in_browser and not FLAGS.nobrowser:
         webbrowser.open(html_file)
@@ -49,7 +49,7 @@ def run_test(testing_cmds, html_file=None, show_in_browser=True):
 def gen_html_anno(show_in_browser=True):
     if FLAGS.out_dir is not None:
         cov_dir = os.path.join(FLAGS.out_dir, 'coverage')
-        p = Popen(['coverage', 'html', '-d', cov_dir], shell=True)
+        p = Popen(['coverage', 'html', '-d', cov_dir])
         p.wait()
         if show_in_browser and not FLAGS.nobrowser:
             webbrowser.open(os.path.join(cov_dir, 'index.html'))
@@ -95,14 +95,17 @@ def main(_):
         run_test(test_cmds, 'real.html')
 
     else:
+         print('111111111111')
         p = Popen(['rosnode', 'cleanup'], shell=True)
+        print('22222222222222')
         p.wait()
-
+        print('33333333333333')
         # Kobuki base tests. s-gupta: I had to split the following tests into
         # multiple calls to pytest, and starting gazebo multiple times, in
         # order for things to work. Ditto for create.
         args = 'base:=kobuki use_rviz:=false use_sim:=true'
         kobuki_p = launch_gazebo(args)
+        print('4444444444444444444')
         test_cmds = ['test_make_robots.py test_arm_utils.py test_arm_controls.py'
                      ' test_camera.py --botname locobot']
         run_test(test_cmds, 'locobot.html')
