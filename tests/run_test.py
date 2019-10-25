@@ -27,7 +27,7 @@ def launch_gazebo(args, wait_time=12):
     print('Launching Gazebo ...')
     args = args.split()
     p = Popen(['roslaunch', 'locobot_control', 'main.launch'] + args,
-              stdin=PIPE, stdout=FNULL, stderr=STDOUT)
+              stdin=PIPE, stdout=FNULL, stderr=STDOUT, shell=True)
     time.sleep(wait_time)
     return p
 
