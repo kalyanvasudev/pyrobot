@@ -16,7 +16,7 @@ from absl import flags, app
 FLAGS = flags.FLAGS
 
 flags.DEFINE_string('out_dir', None, '')
-flags.DEFINE_bool('nobrowser', False, 'if True, disable showing the coverage '
+flags.DEFINE_bool('nobrowser', True, 'if True, disable showing the coverage '
                                       'result (if exist) in a web browser')
 flags.DEFINE_bool('test_real', False, 'if True, run only subset of tests for real robot')
 
@@ -81,7 +81,7 @@ def main(_):
         os.makedirs(FLAGS.out_dir)
 
     # # Tests that do not need gazebo
-    test_cmds = ['test_pyrobot_classes.py']# test_base_position_control_inits.py']
+    test_cmds = ['test_pyrobot_classes.py test_base_position_control_inits.py']
     run_test(test_cmds, 'basic.html')
 
     if FLAGS.test_real:
