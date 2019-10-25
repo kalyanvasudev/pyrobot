@@ -34,5 +34,6 @@ install:
   - source ~/pyenv_pyrobot/bin/activate
   - cd /home/travis/build/kalyanvasudev/pyrobot/tests
   - ls
+  - roslaunch locobot_control main.launch use_sim:=true
   - python travis_debug.py
-  - python run_test.py #--out_dir htmlcov/`git rev-parse HEAD` --nobrowser True
+  #- python run_test.py #--out_dir htmlcov/`git rev-parse HEAD` --nobrowser True
