@@ -29,11 +29,13 @@ install:
   - bash locobot_install_all.sh -t sim_only -p 2
   - ls
   - ls low_cost_ws
+before_script:
   - source /opt/ros/kinetic/setup.bash
   - source ~/low_cost_ws/devel/setup.bash
   - source ~/pyenv_pyrobot/bin/activate
   - cd /home/travis/build/kalyanvasudev/pyrobot/tests
   - ls
+script:
   - roslaunch locobot_control main.launch use_sim:=true
   - python travis_debug.py
   #- python run_test.py #--out_dir htmlcov/`git rev-parse HEAD` --nobrowser True
