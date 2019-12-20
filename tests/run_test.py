@@ -27,7 +27,7 @@ def launch_gazebo(args, wait_time=12):
     print('Launching Gazebo ...')
     args = args.split()
     p = Popen(['roslaunch', 'locobot_control', 'main.launch'] + args,
-              stdin=PIPE, stdout=FNULL, stderr=STDOUT, shell=True)
+              stdin=PIPE, stdout=FNULL, stderr=STDOUT)
     time.sleep(wait_time)
     return p
 
@@ -37,13 +37,13 @@ def run_test(testing_cmds, html_file=None, show_in_browser=True):
         html_file = os.path.join(FLAGS.out_dir, html_file)
     for test_file in testing_cmds:
         cmd = ['pytest', '--cov=pyrobot', '-v']
-        if html_file is not None:
-            cmd += ['--html={:s}'.format(html_file), '--self-contained-html']
+        #if html_file is not None:
+        #    cmd += ['--html={:s}'.format(html_file), '--self-contained-html']
         cmd += ['--cov-append']
         t1 = Popen(cmd + test_file.split())
         t1.wait()
-    if show_in_browser and not FLAGS.nobrowser:
-        webbrowser.open(html_file)
+    #if show_in_browser and not FLAGS.nobrowser:
+    #    webbrowser.open(html_file)
 
 
 def gen_html_anno(show_in_browser=True):
@@ -103,7 +103,7 @@ def main(_):
         # Kobuki base tests. s-gupta: I had to split the following tests into
         # multiple calls to pytest, and starting gazebo multiple times, in
         # order for things to work. Ditto for create.
-        args = 'base:=kobuki use_rviz:=false use_sim:=true'
+        args = 'base:=create use_rviz:=false use_sim:=true'
         kobuki_p = launch_gazebo(args)
         print('4444444444444444444')
         test_cmds = ['test_make_robots.py test_arm_utils.py test_arm_controls.py'
@@ -111,13 +111,13 @@ def main(_):
         run_test(test_cmds, 'locobot.html')
         exit_gazebo(kobuki_p)
 
-        args = 'base:=kobuki use_rviz:=false use_sim:=true'
+        args = 'base:=create use_rviz:=false use_sim:=true'
         kobuki_p = launch_gazebo(args)
         test_cmds = ['test_base_velocity_control.py test_base_controllers.py'
                      ' --botname locobot']
         run_test(test_cmds, 'locobot-base.html')
         exit_gazebo(kobuki_p)
-
+        return
         # # Create base tests
         args = 'base:=create use_rviz:=false use_sim:=true'
         create_p = launch_gazebo(args)
