@@ -237,8 +237,8 @@ if [ ! -d "$LOCOBOT_FOLDER/src/turtlebot" ]; then
 	mv yujin_ocs/yocs_safety_controller yujin_ocs/yocs_velocity_smoother .
 	rm -rf yujin_ocs
 
-	sudo apt-get install ros-melodic-kobuki-* -y
-	sudo apt-get install ros-melodic-ecl-streams -y
+	sudo apt-get install ros-kinetic-kobuki-* -y
+	sudo apt-get install ros-kinetic-ecl-streams -y
 fi
 
 ##### End of turtle bot melodic stuff
