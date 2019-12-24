@@ -37,12 +37,12 @@ fi
 echo "$INSTALL_TYPE installation type is chosen for LoCoBot."
 echo "Python $PYTHON_VERSION chosen for pyRobot installation."
 
-trap "exit" INT TERM ERR
-trap "kill 0" EXIT
+#trap "exit" INT TERM ERR
+#trap "kill 0" EXIT
 echo -e "\e[1;33m ******************************************* \e[0m"
 echo -e "\e[1;33m The installation takes around half an hour! \e[0m"
 echo -e "\e[1;33m ******************************************* \e[0m"
-sleep 4
+#sleep 4
 
 
 install_packages () {
