@@ -250,16 +250,17 @@ if [ $PYTHON_VERSION == "2" ]; then
 	echo "source $LOCOBOT_FOLDER/devel/setup.bash" >> ~/.bashrc
 	source $LOCOBOT_FOLDER/devel/setup.bash
 	
-	cd $LOCOBOT_FOLDER/src/pyrobot
-	chmod +x install_pyrobot.sh
-	source install_pyrobot.sh  -p 2
-	
 	virtualenv_name="pyenv_pyrobot_python2"
-	source ~/${virtualenv_name}/bin/activate
-	cd $LOCOBOT_FOLDER/src/pyrobot/robots/LoCoBot
-	pip install --ignore-installed -r requirements_python2.txt
-	pip install .
-	deactivate
+	VIRTUALENV_FOLDER=~/${virtualenv_name}
+	if [ ! -d "$VIRTUALENV_FOLDER" ]; then
+		virtualenv --system-site-packages -p python2.7 $VIRTUALENV_FOLDER
+		source ~/${virtualenv_name}/bin/activate
+		cd $LOCOBOT_FOLDER/src/pyrobot/robots/LoCoBot
+		pip install --ignore-installed -r requirements_python2.txt
+		cd $LOCOBOT_FOLDER/src/pyrobot/
+		pip install .
+		deactivate
+	fi
 fi
 if [ $PYTHON_VERSION == "3" ]; then
 	cd $LOCOBOT_FOLDER
