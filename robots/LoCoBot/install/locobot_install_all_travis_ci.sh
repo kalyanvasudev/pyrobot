@@ -180,7 +180,7 @@ if [ ! -d "$LOCOBOT_FOLDER/src" ]; then
 fi
 if [ ! -d "$LOCOBOT_FOLDER/src/pyrobot" ]; then
 	cd $LOCOBOT_FOLDER/src
-	git clone --recurse-submodules https://github.com/kalyanvasudev/pyrobot.git
+	git clone --recurse-submodules https://github.com/facebookresearch/pyrobot.git
 fi
 cd $LOCOBOT_FOLDER
 rosdep update 
@@ -252,7 +252,7 @@ if [ $PYTHON_VERSION == "2" ]; then
 	virtualenv_name="pyenv_pyrobot_python2"
 	source ~/${virtualenv_name}/bin/activate
 	cd $LOCOBOT_FOLDER/src/pyrobot/robots/LoCoBot
-	pip install --ignore-installed -r requirements.txt
+	pip install --ignore-installed -r requirements_python2.txt
 	
 	cd $LOCOBOT_FOLDER
 	catkin_make
