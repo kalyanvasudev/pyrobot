@@ -258,6 +258,7 @@ if [ $PYTHON_VERSION == "2" ]; then
 	source ~/${virtualenv_name}/bin/activate
 	cd $LOCOBOT_FOLDER/src/pyrobot/robots/LoCoBot
 	pip install --ignore-installed -r requirements_python2.txt
+	pip install .
 	deactivate
 fi
 if [ $PYTHON_VERSION == "3" ]; then
