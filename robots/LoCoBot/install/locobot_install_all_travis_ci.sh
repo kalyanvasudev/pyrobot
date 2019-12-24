@@ -245,6 +245,11 @@ fi
 
 # STEP 6 - Make a virtual env to install other dependencies (with pip)
 if [ $PYTHON_VERSION == "2" ]; then
+	cd $LOCOBOT_FOLDER
+	catkin_make
+	echo "source $LOCOBOT_FOLDER/devel/setup.bash" >> ~/.bashrc
+	source $LOCOBOT_FOLDER/devel/setup.bash
+	
 	cd $LOCOBOT_FOLDER/src/pyrobot
 	chmod +x install_pyrobot.sh
 	source install_pyrobot.sh  -p 2
@@ -253,11 +258,6 @@ if [ $PYTHON_VERSION == "2" ]; then
 	source ~/${virtualenv_name}/bin/activate
 	cd $LOCOBOT_FOLDER/src/pyrobot/robots/LoCoBot
 	pip install --ignore-installed -r requirements_python2.txt
-	
-	cd $LOCOBOT_FOLDER
-	catkin_make
-	echo "source $LOCOBOT_FOLDER/devel/setup.bash" >> ~/.bashrc
-	source $LOCOBOT_FOLDER/devel/setup.bash
 	deactivate
 fi
 if [ $PYTHON_VERSION == "3" ]; then
