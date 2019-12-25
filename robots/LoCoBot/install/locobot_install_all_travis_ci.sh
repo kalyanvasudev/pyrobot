@@ -120,6 +120,7 @@ declare -a ros_package_names=(
 	"ros-kinetic-kdl-parser-py"
 	"ros-kinetic-orocos-kdl"
 	"ros-kinetic-python-orocos-kdl"
+	"ros-kinetic-libcreate"
 	)
 
 install_packages "${ros_package_names[@]}"
@@ -209,7 +210,6 @@ if [ ! -d "$LOCOBOT_FOLDER/src/turtlebot" ]; then
 	cd turtlebot_apps && rm -rf turtlebot_actions && cd .. # causes error with Jetson Installation
 	git clone https://github.com/turtlebot/turtlebot_msgs.git
 	git clone https://github.com/turtlebot/turtlebot_interactions.git
-	git clone https://github.com/AutonomyLab/libcreate.git
 
 	git clone https://github.com/toeklk/orocos-bayesian-filtering.git
 	cd orocos-bayesian-filtering/orocos_bfl/
