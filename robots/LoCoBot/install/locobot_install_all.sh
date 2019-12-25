@@ -182,7 +182,7 @@ if [ ! -d "$LOCOBOT_FOLDER/src" ]; then
 fi
 if [ ! -d "$LOCOBOT_FOLDER/src/pyrobot" ]; then
 	cd $LOCOBOT_FOLDER/src
-	git clone --recurse-submodules https://github.com/kalyanvasudev/pyrobot.git
+	git clone --recurse-submodules https://github.com/facebookresearch/pyrobot.git
 	if [ $PYTHON_VERSION == "3" ]; then
 		cd pyrobot
 		git checkout python3
@@ -225,7 +225,7 @@ if [ $PYTHON_VERSION == "2" ]; then
 		virtualenv --system-site-packages -p python2.7 $VIRTUALENV_FOLDER
 		source ~/${virtualenv_name}/bin/activate
 		cd $LOCOBOT_FOLDER/src/pyrobot/robots/LoCoBot
-		pip install --ignore-installed -r requirements.txt
+		pip install --ignore-installed -r requirements_python2.txt
 		cd $LOCOBOT_FOLDER/src/pyrobot/
 		pip install .
 		deactivate
