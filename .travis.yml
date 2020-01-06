@@ -1,6 +1,10 @@
-language: python
-python:
-  - "2.7"
+#sudo: required
+cache:
+  - apt
+
+# Build all valid Ubuntu/ROS combinations available on Travis VMs.
+language: generic
+
 # Allows the python virtualenv to use apt-get installed packages, which
 # is essential (as ROS recommends this and pip doesn't seem to contain
 # all packages, or contains them with errors).
@@ -9,7 +13,7 @@ virtualenv:
 # Allow caching of debian (apt-get) packages. This means they're cached
 # on Travis, so we still have to download/install them, but it will be
 # faster than going to the ubuntu repositories.
-cache: apt
+
 # Git settings.
 # NOTE(mbforbes): Change this to groovy-devel when moving to PR2 repo.
 branches:
@@ -17,25 +21,28 @@ branches:
         - master
 # Before anything, see if we can get the mongoDB troubles out of the way.
 # Note that this is a Travis-CI specific problem; this is not needed in
-install:
-  #- sudo apt-get --purge remove mongodb-10gen
+before_install:
+  - sudo apt-get --purge remove mongodb-10gen
   - sudo apt update
   - cd
   - sudo apt-get install curl
   - sudo apt-get install python-tk
-  - curl 'https://raw.githubusercontent.com/kalyanvasudev/pyrobot/master/robots/LoCoBot/install/locobot_install_all.sh' > locobot_install_all.sh
+  #- curl 'https://raw.githubusercontent.com/facebookresearch/pyrobot/Develop/robots/LoCoBot/install/locobot_install_all_travis_ci.sh' > locobot_install_all.sh
+  #- curl 'https://raw.githubusercontent.com/kalyanvasudev/pyrobot/master/robots/LoCoBot/install/locobot_install_all.sh' > locobot_install_all.sh
+  - curl 'https://raw.githubusercontent.com/kalyanvasudev/pyrobot/master/robots/LoCoBot/install/locobot_install_all_travis_ci.sh' > locobot_install_all.sh
   - pwd
   - chmod +x locobot_install_all.sh
-  - bash locobot_install_all.sh -t sim_only -p 2
-  - ls
-  - ls low_cost_ws
-before_script:
-  - source /opt/ros/kinetic/setup.bash
-  - source ~/low_cost_ws/devel/setup.bash
-  - source ~/pyenv_pyrobot/bin/activate
-  - cd /home/travis/build/kalyanvasudev/pyrobot/tests
-  - ls
+  - ./locobot_install_all.sh -t sim_only -p 2
+install:
+  - pwd
 script:
-  - roslaunch locobot_control main.launch use_sim:=true
-  - python travis_debug.py
-  #- python run_test.py #--out_dir htmlcov/`git rev-parse HEAD` --nobrowser True
+  - source /opt/ros/kinetic/setup.bash
+  - cd ~/low_cost_ws
+  - source devel/setup.bash
+  - source ~/pyenv_pyrobot_python2/bin/activate
+  #- source ~/pyenv_pyrobot/bin/activate
+  - cd src/pyrobot/tests
+  - python run_test.py --out_dir htmlcov/`git rev-parse HEAD` --nobrowser
+  - cd ~/low_cost_ws/src/pyrobot/
+  - git branch
+  - git remote -v
