@@ -99,6 +99,10 @@ class LoCoBotCamera(object):
         pts_in_cam = self.depth_cam.get_pix_3dpt(depth_im=depth_im, rs=rs, cs=cs)
         print(pts_in_cam.shape)
         pts = pts_in_cam[:3, :].T
+
+        sensor_link_to_image_frame = np.array([[0.0,0.0,1.0],[1.0,0.0,0.0],[0.0,1.0,0.0]])
+        pts = np.dot(pts, sensor_link_to_image_frame.T)
+        
         print(pts)
         print('here-1')
         print(rgb_im.shape)
