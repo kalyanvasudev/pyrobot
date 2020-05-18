@@ -43,6 +43,8 @@ class LoCoBotBase(object):
 
         init_rotation = self._rot_matrix(self.init_state.rotation)
 
+        # true position here refers to the relative position from
+        # where `self.init_state` is treated as origin
         true_position = cur_state.position - self.init_state.position
         true_position = np.matmul(init_rotation.transpose(), true_position)
 

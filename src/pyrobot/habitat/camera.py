@@ -15,6 +15,8 @@ from cv_bridge import CvBridge, CvBridgeError
 
 import habitat_sim.agent as habAgent
 import habitat_sim.utils as habUtils
+from pyrobot.locobot.camera import DepthImgProcessor
+from tf.transformations import euler_from_quaternion, euler_from_matrix
 
 
 class LoCoBotCamera(object):
@@ -26,6 +28,11 @@ class LoCoBotCamera(object):
         self.agent = self.sim.get_agent(self.configs.COMMON.SIMULATOR.DEFAULT_AGENT_ID)
 
         # Depth Image processor
+        self.depth_cam = DepthImgProcessor(
+            subsample_pixs=1,
+            depth_threshold=(0, 100),
+            cfg_filename="realsense_habitat.yaml"
+        )        
 
         # Pan and tilt related vairades.
         self.pan = 0.0
@@ -33,7 +40,7 @@ class LoCoBotCamera(object):
 
     def get_rgb(self):
         observations = self.sim.get_sensor_observations()
-        return observations["rgb"]
+        return observations["rgb"][:, :, 0:3]
 
     def get_depth(self):
         observations = self.sim.get_sensor_observations()
@@ -41,59 +48,114 @@ class LoCoBotCamera(object):
 
     def get_rgb_depth(self):
         observations = self.sim.get_sensor_observations()
-        return observations["rgb"], observations["depth"]
+        return observations["rgb"][:, :, 0:3], observations["depth"]
 
     def get_intrinsics(self):
-
-        # Todo: Remove this after we fix intrinsics
-        raise NotImplementedError
         """
 		Returns the instrinsic matrix of the camera
 
 		:return: the intrinsic matrix (shape: :math:`[3, 3]`)
 		:rtype: np.ndarray
 		"""
-        # fx = self.configs['Camera.fx']
-        # fy = self.configs['Camera.fy']
-        # cx = self.configs['Camera.cx']
-        # cy = self.configs['Camera.cy']
+        fx = self.configs['Camera.fx']
+        fy = self.configs['Camera.fy']
+        cx = self.configs['Camera.cx']
+        cy = self.configs['Camera.cy']
         Itc = np.array([[fx, 0, cx], [0, fy, cy], [0, 0, 1]])
         return Itc
 
     def pix_to_3dpt(self, rs, cs, in_cam=False):
         """
-		Get the 3D points of the pixels in RGB images.
+        Get the 3D points of the pixels in RGB images.
 
-		:param rs: rows of interest in the RGB image.
-		           It can be a list or 1D numpy array
-		           which contains the row indices.
-		           The default value is None,
-		           which means all rows.
-		:param cs: columns of interest in the RGB image.
-		           It can be a list or 1D numpy array
-		           which contains the column indices.
-		           The default value is None,
-		           which means all columns.
-		:param in_cam: return points in camera frame,
-		               otherwise, return points in base frame
+        :param rs: rows of interest in the RGB image.
+                   It can be a list or 1D numpy array
+                   which contains the row indices.
+                   The default value is None,
+                   which means all rows.
+        :param cs: columns of interest in the RGB image.
+                   It can be a list or 1D numpy array
+                   which contains the column indices.
+                   The default value is None,
+                   which means all columns.
+        :param in_cam: return points in camera frame,
+                       otherwise, return points in base frame
 
-		:type rs: list or np.ndarray
-		:type cs: list or np.ndarray
-		:type in_cam: bool
+        :type rs: list or np.ndarray
+        :type cs: list or np.ndarray
+        :type in_cam: bool
 
-		:returns: tuple (pts, colors)
+        :returns: tuple (pts, colors)
 
-		          pts: point coordinates in world frame
-		          (shape: :math:`[N, 3]`)
+                  pts: point coordinates in world frame
+                  (shape: :math:`[N, 3]`)
 
-		          colors: rgb values for pts_in_cam
-		          (shape: :math:`[N, 3]`)
+                  colors: rgb values for pts_in_cam
+                  (shape: :math:`[N, 3]`)
 
-		:rtype: tuple(np.ndarray, np.ndarray)
-		"""
+        :rtype: tuple(np.ndarray, np.ndarray)
+        """
+        rgb_im, depth_im = self.get_rgb_depth()
+        pts_in_cam = self.depth_cam.get_pix_3dpt(depth_im=depth_im, rs=rs, cs=cs)
+        print(pts_in_cam.shape)
+        pts = pts_in_cam[:3, :].T
+        print(pts)
+        print('here-1')
+        print(rgb_im.shape)
+        print(rgb_im[rs, cs].shape)
+        colors = rgb_im[rs, cs].reshape(-1, 3)
+        if in_cam:
+            return pts, colors
 
-        raise NotImplementedError
+        # CAM -> BASE -> PYROBOT environment -> HABITAT
+        # here, points are now given in camera frame
+        # the thing to do next is to transform the points from camera frame into the
+        # origin / base frame of pyrobot.
+        # This does not translate to what habitat thinks as origin,
+        # because pyrobot's habitat-reference origin is `self.agent.init_state`
+        print('here')
+        print(pts)
+        # import pdb
+        # pdb.set_trace()
+        init_state = self.agent.initial_state # habitat - x,y,z
+        initial_rotation = np.quaternion(1.0, 0.0, 0.0, 0.0) # hard-coded, initial rotation
+        print('here2')
+        cur_state = self.agent.get_state()
+        print('here3')
 
+        init_rotation = self._rot_matrix(initial_rotation)
+        print('here4')
+
+        true_position = cur_state.position - init_state.position
+        true_position = np.matmul(init_rotation.transpose(), true_position)
+        print('here5')
+
+        cur_rotation = self._rot_matrix(cur_state.rotation)
+        cur_rotation = np.matmul(init_rotation.transpose(), cur_rotation)
+        print('here6')
+
+        (r, pitch, yaw) = euler_from_matrix(cur_rotation, axes="sxzy")        
+        x, y, yaw = (-1 * true_position[2], true_position[0], yaw)
+
+        sensor_offset, quat_base_to_sensor = self._compute_relative_pose(self.pan, self.tilt)
+        pts = pts + sensor_offset
+        
+        quat_pyrobot_origin_to_base = habUtils.quat_from_angle_axis(
+            yaw, np.asarray([0.0, 0.0, 1.0])
+        )
+
+        quat_pyrobot_origin_to_camera = quat_pyrobot_origin_to_base * quat_base_to_sensor
+        quat_camera_to_pyrobot_origin = quat_pyrobot_origin_to_camera.inverse()
+        rot_camera_to_pyrobot_origin = self._rot_matrix(quat_camera_to_pyrobot_origin)
+        
+        pts = np.dot(pts, rot_camera_to_pyrobot_origin)
+        pts = pts + np.array([x, y, 0])
+        return pts, colors
+
+    def _rot_matrix(self, habitat_quat):
+        quat_list = [habitat_quat.x, habitat_quat.y, habitat_quat.z, habitat_quat.w]
+        return prutil.quat_to_rot_mat(quat_list)
+    
     def get_current_pcd(self, in_cam=True):
         """
 		Return the point cloud at current time step (one frame only)
@@ -189,7 +251,7 @@ class LoCoBotCamera(object):
         sensor_offset_tilt = np.asarray([0.0, 0.0, -1 * tilt_link])
 
         quat_cam_to_pan = habUtils.quat_from_angle_axis(
-            -1 * self.tilt, np.asarray([1.0, 0.0, 0.0])
+            -1 * tilt, np.asarray([1.0, 0.0, 0.0])
         )
 
         sensor_offset_pan = habUtils.quat_rotate_vector(
@@ -198,7 +260,7 @@ class LoCoBotCamera(object):
         sensor_offset_pan += np.asarray([0.0, pan_link, 0.0])
 
         quat_pan_to_base = habUtils.quat_from_angle_axis(
-            -1 * self.pan, np.asarray([0.0, 1.0, 0.0])
+            -1 * pan, np.asarray([0.0, 1.0, 0.0])
         )
 
         sensor_offset_base = habUtils.quat_rotate_vector(
@@ -226,8 +288,8 @@ class LoCoBotCamera(object):
         self.pan = pan
         self.tilt = tilt
         sensor_offset, quat_base_to_sensor = self._compute_relative_pose(pan, tilt)
-        cur_state = self.agent.get_state()
-        sensor_position = sensor_offset + cur_state.position
+        cur_state = self.agent.get_state() # Habitat frame
+        sensor_position = cur_state.position + sensor_offset
         sensor_quat = cur_state.rotation * quat_base_to_sensor
         cur_state.sensor_states["rgb"].position = sensor_position
         cur_state.sensor_states["rgb"].rotation = sensor_quat
